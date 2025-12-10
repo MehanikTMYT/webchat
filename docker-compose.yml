@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "${API_GATEWAY_PORT:-8000}:8000"
+    environment:
+      - VDS_DOMAIN=${VDS_DOMAIN:-chat.mehhost.ru}
+      - JWT_SECRET=${JWT_SECRET:-auto_generate}
+    volumes:
+      - ./backend:/workspace/backend
+      - ./data:/workspace/data
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  local-inference:
+    build:
+      context: .
+      dockerfile: Dockerfile.inference
+    ports:
+      - "${LOCAL_INFERENCE_PORT:-8001}:8001"
+    environment:
+      - CUDA_ARCH=${RUST_CUDA_ARCH:-auto}
+      - RUST_ACCELERATION=${RUST_ACCELERATION:-true}
+    volumes:
+      - ./local-inference:/workspace/local-inference
+      - ./models:/workspace/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/chatbot.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: chatbot
+      MYSQL_USER: chatbot_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+
+volumes:
+  db_data:
