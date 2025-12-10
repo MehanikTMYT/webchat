@@ -4,6 +4,12 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 
+
+from dotenv import load_dotenv
+
+# Явная загрузка .env файла
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
+
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,6 +19,7 @@ from backend.services.connection_manager import manager, ConnectionMode
 from backend.config.network_config import NetworkConfig
 from backend.auth.jwt_manager import JWTManager
 from backend.auth.offline_verifier import OfflineTokenVerifier
+
 
 # Настройка логирования
 logging.basicConfig(

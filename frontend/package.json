@@ -4,19 +4,40 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "preview": "vite preview --mode production",
+    "build:secure": "cross-env NODE_ENV=production VITE_PRODUCTION=true vite build",
+    "lint": "eslint . --ext .js,.vue --fix",
+    "lint:check": "eslint . --ext .js,.vue",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.4",
-    "pinia": "^2.1.6",
-    "axios": "^1.5.0",
-    "socket.io-client": "^4.7.2"
+    "axios": "^1.7.4",
+    "pinia": "^2.1.7",
+    "socket.io-client": "^4.7.5",
+    "terser": "^5.44.1",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.3.1",
-    "vite": "^4.4.9"
+    "@rushstack/eslint-patch": "^1.10.3",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.27.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "vite": "^7.2.7"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint --fix"
+    ]
   }
 }
