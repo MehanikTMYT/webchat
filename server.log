@@ -1,0 +1,37 @@
+2025-12-10 18:31:57,841 - backend.auth.jwt_manager - INFO - Generated new JWT secret key
+2025-12-10 18:31:57,841 - backend.auth.offline_verifier - INFO - Generated temporary JWT secret key for offline verification
+/workspace/backend/main.py:514: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/workspace/backend/main.py:528: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("shutdown")
+2025-12-10 18:31:57,893 - __main__ - INFO - Starting API Gateway on 0.0.0.0:8000
+2025-12-10 18:31:58,038 - backend.auth.jwt_manager - INFO - Generated new JWT secret key
+2025-12-10 18:31:58,038 - backend.auth.offline_verifier - INFO - Generated temporary JWT secret key for offline verification
+INFO:     Started server process [717]
+INFO:     Waiting for application startup.
+2025-12-10 18:31:58,199 - backend.main - INFO - Starting Hybrid Chatbot API Gateway...
+2025-12-10 18:32:00,548 - backend.main - INFO - Network configuration: relay
+2025-12-10 18:32:02,809 - backend.main - INFO - Inference endpoint: http://127.0.0.1:8001
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Настройка уже была выполнена ранее
+INFO:     127.0.0.1:39278 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39292 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39304 - "GET /network/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39318 - "POST /auth/register HTTP/1.1" 200 OK
+2025-12-10 18:32:29,995 - backend.auth.offline_verifier - WARNING - Invalid token: Signature verification failed
+2025-12-10 18:32:29,996 - backend.main - ERROR - Token verification failed: 401: Invalid authentication credentials
+INFO:     127.0.0.1:39322 - "GET /auth/verify HTTP/1.1" 401 Unauthorized
+2025-12-10 18:32:29,999 - backend.auth.offline_verifier - WARNING - Invalid token: Signature verification failed
+2025-12-10 18:32:29,999 - backend.main - ERROR - Token verification failed: 401: Invalid authentication credentials
+INFO:     127.0.0.1:39326 - "POST /api/sessions HTTP/1.1" 401 Unauthorized
