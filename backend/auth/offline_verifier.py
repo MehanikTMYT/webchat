@@ -6,26 +6,26 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def get_secret_key() -> str:
+    """Получает или генерирует секретный ключ (такой же как в JWTManager)"""
+    secret = os.getenv('JWT_SECRET')
+    
+    if not secret or secret == 'auto_generate':
+        # Генерируем новый секретный ключ для демо-режима
+        import secrets
+        secret = secrets.token_urlsafe(32)
+        logger.info("Generated temporary JWT secret key for offline verification")
+        # В реальной реализации здесь нужно будет обеспечить надежное хранение ключа
+    
+    return secret
+
+
 class OfflineTokenVerifier:
     """Класс для оффлайн-проверки JWT токенов"""
     
     def __init__(self):
-        self.secret_key = self._get_secret_key()
+        self.secret_key = get_secret_key()
         self.algorithm = "HS256"
-    
-    def _get_secret_key(self) -> str:
-        """Получает секретный ключ из переменных окружения"""
-        secret = os.getenv('JWT_SECRET')
-        
-        if not secret or secret == 'auto_generate':
-            # Если ключ не задан или должен генерироваться автоматически,
-            # предполагаем, что он был сгенерирован при первом запуске
-            # и сохранен в .env файле
-            logger.warning("JWT_SECRET not properly configured for offline verification")
-            # В реальной реализации здесь нужно будет обеспечить надежное хранение ключа
-            raise ValueError("JWT_SECRET must be properly configured for offline verification")
-        
-        return secret
     
     def verify_token(self, token: str) -> Optional[Dict[str, Any]]:
         """

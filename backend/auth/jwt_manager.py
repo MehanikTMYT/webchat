@@ -8,24 +8,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def get_secret_key() -> str:
+    """Получает или генерирует секретный ключ"""
+    secret = os.getenv('JWT_SECRET')
+    
+    if not secret or secret == 'auto_generate':
+        # Генерируем новый секретный ключ
+        secret = secrets.token_urlsafe(32)
+        # В реальной реализации нужно сохранить его в безопасное место
+        logger.info("Generated new JWT secret key")
+    
+    return secret
+
+
 class JWTManager:
     """Класс для управления JWT токенами"""
     
     def __init__(self):
-        self.secret_key = self._get_secret_key()
+        self.secret_key = get_secret_key()
         self.algorithm = "HS256"
-    
-    def _get_secret_key(self) -> str:
-        """Получает или генерирует секретный ключ"""
-        secret = os.getenv('JWT_SECRET')
-        
-        if not secret or secret == 'auto_generate':
-            # Генерируем новый секретный ключ
-            secret = secrets.token_urlsafe(32)
-            # В реальной реализации нужно сохранить его в безопасное место
-            logger.info("Generated new JWT secret key")
-        
-        return secret
     
     def create_token(self, data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
         """Создает JWT токен"""
